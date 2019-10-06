@@ -8,6 +8,11 @@ env:
 addons:
   chrome: stable
   firefox: latest
+  apt:
+    update: true
+
+before_install:
+  - sudo apt-get install -y ubuntu-restricted-extras
 
 install:
   - npm install
