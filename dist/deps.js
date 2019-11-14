@@ -12,7 +12,6 @@ goog.addDependency('../../../demo/input_container.js', ['shakaDemo.InputContaine
 goog.addDependency('../../../demo/main.js', ['shakaDemo.Main'], []);
 goog.addDependency('../../../demo/search.js', ['shakaDemo.Search'], []);
 goog.addDependency('../../../demo/tooltip.js', ['shakaDemo.Tooltips'], []);
-goog.addDependency('../../../dist/locales.js', ['shaka.ui.Locales'], ['shaka.ui.Localization']);
 goog.addDependency('../../../lib/abr/ewma.js', ['shaka.abr.Ewma'], ['goog.asserts']);
 goog.addDependency('../../../lib/abr/ewma_bandwidth_estimator.js', ['shaka.abr.EwmaBandwidthEstimator'], ['shaka.abr.Ewma']);
 goog.addDependency('../../../lib/abr/simple_abr_manager.js', ['shaka.abr.SimpleAbrManager'], ['goog.asserts', 'shaka.abr.EwmaBandwidthEstimator', 'shaka.log', 'shaka.util.StreamUtils']);

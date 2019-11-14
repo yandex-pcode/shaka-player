@@ -10,19 +10,13 @@ window.shaka = {};
 /** @const */
 shaka.abr = {};
 /** @const */
-shaka.cast = {};
-/** @const */
 shaka.dash = {};
-/** @const */
-shaka.hls = {};
 /** @const */
 shaka.media = {};
 /** @const */
 shaka.media.ManifestParser = {};
 /** @const */
 shaka.net = {};
-/** @const */
-shaka.offline = {};
 /** @const */
 shaka.polyfill = {};
 /** @const */
@@ -1027,109 +1021,6 @@ shaka.abr.SimpleAbrManager.prototype.setVariants = function(variants) {};
  */
 shaka.abr.SimpleAbrManager.prototype.configure = function(config) {};
 /**
- * A proxy to switch between local and remote playback for Chromecast in a way
- * that is transparent to the app's controls.
- * @constructor
- * @struct
- * @param {!HTMLMediaElement} video The local video element associated with the
- *   local Player instance.
- * @param {!shaka.Player} player A local Player instance.
- * @param {string} receiverAppId The ID of the cast receiver application.
- *   If blank, casting will not be available, but the proxy will still function
- *   otherwise.
- * @implements {shaka.util.IDestroyable}
- * @extends {shaka.util.FakeEventTarget}
- */
-shaka.cast.CastProxy = function(video, player, receiverAppId) {};
-/**
- * Destroys the proxy and the underlying local Player.
- * @param {boolean=} forceDisconnect If true, force the receiver app to shut
- *   down by disconnecting.  Does nothing if not connected.
- * @override
- */
-shaka.cast.CastProxy.prototype.destroy = function(forceDisconnect) {};
-/**
- * Get a proxy for the video element that delegates to local and remote video
- * elements as appropriate.
- * @suppress {invalidCasts} to cast proxy Objects to unrelated types
- * @return {!HTMLMediaElement}
- */
-shaka.cast.CastProxy.prototype.getVideo = function() {};
-/**
- * Get a proxy for the Player that delegates to local and remote Player objects
- * as appropriate.
- * @suppress {invalidCasts} to cast proxy Objects to unrelated types
- * @return {!shaka.Player}
- */
-shaka.cast.CastProxy.prototype.getPlayer = function() {};
-/**
- * @return {boolean} True if the cast API is available and there are receivers.
- */
-shaka.cast.CastProxy.prototype.canCast = function() {};
-/**
- * @return {boolean} True if we are currently casting.
- */
-shaka.cast.CastProxy.prototype.isCasting = function() {};
-/**
- * @return {string} The name of the Cast receiver device, if isCasting().
- */
-shaka.cast.CastProxy.prototype.receiverName = function() {};
-/**
- * @return {!Promise} Resolved when connected to a receiver.  Rejected if the
- *   connection fails or is canceled by the user.
- */
-shaka.cast.CastProxy.prototype.cast = function() {};
-/**
- * Set application-specific data.
- * @param {Object} appData Application-specific data to relay to the receiver.
- */
-shaka.cast.CastProxy.prototype.setAppData = function(appData) {};
-/**
- * Show a dialog where user can choose to disconnect from the cast connection.
- */
-shaka.cast.CastProxy.prototype.suggestDisconnect = function() {};
-/**
- * @param {string} newAppId
- */
-shaka.cast.CastProxy.prototype.changeReceiverId = function(newAppId) {};
-/**
- * Force the receiver app to shut down by disconnecting.
- */
-shaka.cast.CastProxy.prototype.forceDisconnect = function() {};
-/**
- * A receiver to communicate between the Chromecast-hosted player and the
- * sender application.
- * @constructor
- * @struct
- * @param {!HTMLMediaElement} video The local video element associated with the
- *   local Player instance.
- * @param {!shaka.Player} player A local Player instance.
- * @param {function(Object)=} appDataCallback A callback to handle
- *   application-specific data passed from the sender.  This can come either
- *   from a Shaka-based sender through CastProxy.setAppData, or from a
- *   sender using the customData field of the LOAD message of the standard
- *   Cast message namespace.  It can also be null if no such data is sent.
-  * @param {function(string):string=} contentIdCallback A callback to
- *   retrieve manifest URI from the provided content id.
- * @implements {shaka.util.IDestroyable}
- * @extends {shaka.util.FakeEventTarget}
- */
-shaka.cast.CastReceiver = function(video, player, appDataCallback, contentIdCallback) {};
-/**
- * @return {boolean} True if the cast API is available and there are receivers.
- */
-shaka.cast.CastReceiver.prototype.isConnected = function() {};
-/**
- * @return {boolean} True if the receiver is not currently doing loading or
- *   playing anything.
- */
-shaka.cast.CastReceiver.prototype.isIdle = function() {};
-/**
- * Destroys the underlying Player, then terminates the cast receiver app.
- * @override
- */
-shaka.cast.CastReceiver.prototype.destroy = function() {};
-/**
  * Creates a DataViewReader, which abstracts a DataView object.
  * @param {!DataView} dataView The DataView.
  * @param {shaka.util.DataViewReader.Endianness} endianness The endianness.
@@ -1630,45 +1521,6 @@ shaka.dash.DashParser.prototype.update = function() {};
 shaka.dash.DashParser.prototype.onExpirationUpdated = function(sessionId, expiration) {};
 /**
  * @namespace
- * @summary A networking plugin to handle data URIs.
- * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/data_URIs
- * @param {string} uri
- * @param {shaka.extern.Request} request
- * @param {shaka.net.NetworkingEngine.RequestType} requestType
- * @param {shaka.extern.ProgressUpdated} progressUpdated Called when a
- *   progress event happened.
- * @return {!shaka.extern.IAbortableOperation.<shaka.extern.Response>}
- */
-shaka.net.DataUriPlugin = function(uri, request, requestType, progressUpdated) {};
-/**
- * Creates a new HLS parser.
- * @struct
- * @constructor
- * @implements {shaka.extern.ManifestParser}
- */
-shaka.hls.HlsParser = function() {};
-/**
- * @override
- */
-shaka.hls.HlsParser.prototype.configure = function(config) {};
-/**
- * @override
- */
-shaka.hls.HlsParser.prototype.start = function(uri, playerInterface) {};
-/**
- * @override
- */
-shaka.hls.HlsParser.prototype.stop = function() {};
-/**
- * @override
- */
-shaka.hls.HlsParser.prototype.update = function() {};
-/**
- * @override
- */
-shaka.hls.HlsParser.prototype.onExpirationUpdated = function(sessionId, expiration) {};
-/**
- * @namespace
  * @summary A networking plugin to handle http and https URIs via the Fetch API.
  * @param {string} uri
  * @param {shaka.extern.Request} request
@@ -1696,17 +1548,6 @@ shaka.net.HttpFetchPlugin.isSupported = function() {};
  * @return {!shaka.extern.IAbortableOperation.<shaka.extern.Response>}
  */
 shaka.net.HttpXHRPlugin = function(uri, request, requestType, progressUpdated) {};
-/**
- * @namespace
- * @summary A plugin that handles requests for offline content.
- * @param {string} uri
- * @param {shaka.extern.Request} request
- * @param {shaka.net.NetworkingEngine.RequestType} requestType
- * @param {shaka.extern.ProgressUpdated} progressUpdated Called when a
- *   progress event happened.
- * @return {!shaka.extern.IAbortableOperation.<shaka.extern.Response>}
- */
-shaka.offline.OfflineScheme = function(uri, request, requestType, progressUpdated) {};
 /**
  * <p>
  * This defines the default text displayer plugin. An instance of this
@@ -2208,118 +2049,6 @@ shaka.Player.LoadMode = {
   'MEDIA_SOURCE': 2,
   'SRC_EQUALS': 3
 };
-/**
- * This manages persistent offline data including storage, listing, and deleting
- * stored manifests.  Playback of offline manifests are done through the Player
- * using a special URI (see shaka.offline.OfflineUri).
- * First, check support() to see if offline is supported by the platform.
- * Second, configure() the storage object with callbacks to your application.
- * Third, call store(), remove(), or list() as needed.
- * When done, call destroy().
- * @param {!shaka.Player=} player
- *    A player instance to share a networking engine and configuration with.
- *    When initializing with a player, storage is only valid as long as
- *    |destroy| has not been called on the player instance. When omitted,
- *    storage will manage its own networking engine and configuration.
- * @struct
- * @constructor
- * @implements {shaka.util.IDestroyable}
- */
-shaka.offline.Storage = function(player) {};
-/**
- * Gets whether offline storage is supported.  Returns true if offline storage
- * is supported for clear content.  Support for offline storage of encrypted
- * content will not be determined until storage is attempted.
- * @return {boolean}
- */
-shaka.offline.Storage.support = function() {};
-/**
- * @override
- */
-shaka.offline.Storage.prototype.destroy = function() {};
-/**
- * Sets configuration values for Storage.  This is associated with
- * Player.configure and will change the player instance given at
- * initialization.
- * @param {string|!Object} config This should either be a field name or an
- *   object following the form of {@link shaka.extern.PlayerConfiguration},
- *   where you may omit any field you do not wish to change.
- * @param {*=} value This should be provided if the previous parameter
- *   was a string field name.
- * @return {boolean}
- */
-shaka.offline.Storage.prototype.configure = function(config, value) {};
-/**
- * Return a copy of the current configuration.  Modifications of the returned
- * value will not affect the Storage instance's active configuration.  You must
- * call storage.configure() to make changes.
- * @return {shaka.extern.PlayerConfiguration}
- */
-shaka.offline.Storage.prototype.getConfiguration = function() {};
-/**
- * Return the networking engine that storage is using. If storage was
- * initialized with a player instance, then the networking engine returned
- * will be the same as |player.getNetworkingEngine()|.
- * The returned value will only be null if |destroy| was called before
- * |getNetworkingEngine|.
- * @return {shaka.net.NetworkingEngine}
- */
-shaka.offline.Storage.prototype.getNetworkingEngine = function() {};
-/**
- * Stores the given manifest.  If the content is encrypted, and encrypted
- * content cannot be stored on this platform, the Promise will be rejected with
- * error code 6001, REQUESTED_KEY_SYSTEM_CONFIG_UNAVAILABLE.
- * @param {string} uri The URI of the manifest to store.
- * @param {!Object=} appMetadata An arbitrary object from the application
- *   that will be stored along-side the offline content.  Use this for any
- *   application-specific metadata you need associated with the stored content.
- *   For details on the data types that can be stored here, please refer to
- *   {@link https://bit.ly/StructClone}
- * @param {string|shaka.extern.ManifestParser.Factory=} mimeType
- *   The mime type for the content |manifestUri| points to or a manifest parser
- *   factory to override auto-detection or use an unregistered parser. Passing
- *   a manifest parser factory is deprecated and will be removed.
- * @return {!Promise.<shaka.extern.StoredContent>}  A Promise to a structure
- *   representing what was stored.  The "offlineUri" member is the URI that
- *   should be given to Player.load() to play this piece of content offline.
- *   The "appMetadata" member is the appMetadata argument you passed to store().
- */
-shaka.offline.Storage.prototype.store = function(uri, appMetadata, mimeType) {};
-/**
- * Returns true if an asset is currently downloading.
- * @return {boolean}
- */
-shaka.offline.Storage.prototype.getStoreInProgress = function() {};
-/**
- * Removes the given stored content.  This will also attempt to release the
- * licenses, if any.
- * @param {string} contentUri
- * @return {!Promise}
- */
-shaka.offline.Storage.prototype.remove = function(contentUri) {};
-/**
- * Removes any EME sessions that were not successfully removed before.  This
- * returns whether all the sessions were successfully removed.
- * @return {!Promise.<boolean>}
- */
-shaka.offline.Storage.prototype.removeEmeSessions = function() {};
-/**
- * Lists all the stored content available.
- * @return {!Promise.<!Array.<shaka.extern.StoredContent>>}  A Promise to an
- *   array of structures representing all stored content.  The "offlineUri"
- *   member of the structure is the URI that should be given to Player.load()
- *   to play this piece of content offline.  The "appMetadata" member is the
- *   appMetadata argument you passed to store().
- */
-shaka.offline.Storage.prototype.list = function() {};
-/**
- * Delete the on-disk storage and all the content it contains. This should not
- * be done in normal circumstances. Only do it when storage is rendered
- * unusable, such as by a version mismatch. No business logic will be run, and
- * licenses will not be released.
- * @return {!Promise}
- */
-shaka.offline.Storage.deleteAll = function() {};
 /**
  * Install all polyfills.
  */
