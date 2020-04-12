@@ -40,6 +40,13 @@
           }
         });
         player.addEventListener('error', onErrorEvent);
+        console.time('firstFrame');
+        video.ontimeupdate = () => {
+          if (video.currentTime > 0) {
+            console.timeEnd('firstFrame');
+            video.ontimeupdate = null;
+          }
+        };
         player
           .load(manifestUri)
           .then(function() {
@@ -71,7 +78,7 @@
         id="video"
         width="640"
         controls
-        autoplay
+        autoplay muted
 ></video>
 </body>
 </html>
