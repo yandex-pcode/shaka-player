@@ -155,7 +155,7 @@ shaka.extern.SchemePlugin;
 
 
 /**
- * @typedef {function(number, number, number)}
+ * @typedef {function(number, number, number, ArrayBuffer=)}
  *
  * @description
  * A callback function to handle progress event through networking engine in
