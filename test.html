@@ -9,9 +9,10 @@
         }
     </style>
 <!--    <script src="https://yastatic.net/shaka-player/2.5.5-yandex-patched-custom-build/shaka-player.compiled.js"></script>-->
-    <script src="dist/shaka-player.compiled.js"></script>
+    <script src="dist/shaka-player.compiled.debug.js"></script>
     <script>
-      var manifestUri = 'https://strm.yandex.ru/kal/demo_channel/manifest.mpd?start=1586704800&end=1586704830';
+      // var manifestUri = 'https://strm.yandex.ru/kal/demo_channel/manifest.mpd?start=1586704800&end=1586704830';
+      var manifestUri = 'https://strm.yandex.ru/vh-ya-news-converted/vod-content/11239105495491049655/dash/manifest.mpd';
 
       function initApp() {
         shaka.polyfill.installAll();
