@@ -461,11 +461,13 @@ shaka.net.NetworkingEngine.prototype.clearAllResponseFilters = function() {};
 shaka.net.NetworkingEngine.prototype.destroy = function() {};
 /**
  * Makes a network request and returns the resulting data.
+ * Calls dataChunkLoaded when data chunk was downloaded
  * @param {shaka.net.NetworkingEngine.RequestType} type
  * @param {shaka.extern.Request} request
+ * @param {shaka.extern.ProgressUpdated=} dataChunkLoaded
  * @return {!shaka.net.NetworkingEngine.PendingRequest}
  */
-shaka.net.NetworkingEngine.prototype.request = function(type, request) {};
+shaka.net.NetworkingEngine.prototype.request = function(type, request, dataChunkLoaded) {};
 /**
  * A wrapper class for the number of bytes remaining to be downloaded for the
  * request.
