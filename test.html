@@ -8,13 +8,21 @@
             background: #333;
         }
     </style>
-<!--    <script src="https://yastatic.net/shaka-player/2.5.5-yandex-patched-custom-build/shaka-player.compiled.js"></script>-->
-    <script src="dist/shaka-player.compiled.debug.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/mp4box@0.3.20/dist/mp4box.all.min.js"></script> -->
+   <!-- <script src="https://yastatic.net/shaka-player/2.5.5-yandex-patched-custom-build/shaka-player.compiled.js"></script> -->
+    <!-- <script src="dist/shaka-player.compiled.debug.js"></script> -->
+    <script src="dist/shaka-player.compiled.js"></script>
     <script>
       // var manifestUri = 'https://strm.yandex.ru/kal/demo_channel/manifest.mpd?start=1586704800&end=1586704830';
       var manifestUri = 'https://strm.yandex.ru/vh-ya-news-converted/vod-content/11239105495491049655/dash/manifest.mpd';
-
+      // var manifestUri = 'https://stream-player-js.s3.mds.yandex.net/dash_notreplaced2/manifest.mpd';
+      // var manifestUri = 'https://strm.yandex.ru/kal/sibir/manifest.mpd';
+      
       function initApp() {
+        if (shaka.log) {
+          shaka.log.setLevel(6);
+        }
+        
         shaka.polyfill.installAll();
         if (shaka.Player.isBrowserSupported()) {
           initPlayer();
@@ -29,7 +37,7 @@
 
         video.onprogress = (e) => {
           if (video.buffered.length > 0) {
-            console.log(video.buffered.end(0));
+            console.log('!!',video.buffered.end(0));
           }
         };
 
@@ -43,6 +51,9 @@
           }
         });
         player.addEventListener('error', onErrorEvent);
+        player.addEventListener('emsg', (e) => {
+          console.log('!! emsg', e.detail);
+        });
         console.time('firstFrame');
         video.ontimeupdate = () => {
           if (video.currentTime > 0) {
