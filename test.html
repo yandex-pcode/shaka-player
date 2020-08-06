@@ -8,11 +8,13 @@
             background: #333;
         }
     </style>
-<!--    <script src="https://yastatic.net/shaka-player/2.5.5-yandex-patched-custom-build/shaka-player.compiled.js"></script>-->
+   <!-- <script src="https://yastatic.net/shaka-player/2.5.5-yandex-patched-custom-build/shaka-player.compiled.js"></script> -->
     <script src="dist/shaka-player.compiled.debug.js"></script>
     <script>
-      // var manifestUri = 'https://strm.yandex.ru/kal/demo_channel/manifest.mpd?start=1586704800&end=1586704830';
-      var manifestUri = 'https://strm.yandex.ru/vh-ya-news-converted/vod-content/11239105495491049655/dash/manifest.mpd';
+      var manifestUri = 'https://strm.yandex.ru/kal/demo_channel/manifest.mpd';
+      // var manifestUri = 'https://strm.yandex.ru/vh-ya-news-converted/vod-content/11239105495491049655/dash/manifest.mpd';
+      // var manifestUri = 'http://low-latency-transcoder.sas.yp-c.yandex.net/playlist/manifest.mpd';
+      // var manifestUri = 'https://media.axprod.net/TestVectors/v9-MultiFormat/Clear/Manifest.mpd';
 
       function initApp() {
         shaka.polyfill.installAll();
@@ -50,10 +52,22 @@
             video.ontimeupdate = null;
           }
         };
+        player.addEventListener('manifestparsed', () => {
+          const timeline = player.getManifest().presentationTimeline;
+          console.log('>>> manifestparsed', timeline.getDelay(), player.seekRange(), player.seekRange().end - player.seekRange().start);
+          timeline.setDelay(900)
+        })
+
         player
-          .load(manifestUri)
+          .load(manifestUri, 0)
           .then(function() {
+            const timeline = player.getManifest().presentationTimeline;
+            // const currentDelay = timeline.getDelay();
             console.log('The video has now been loaded!');
+            console.log('>>> load', timeline.getDelay(), player.seekRange(), player.seekRange().end - player.seekRange().start);
+            // timeline.setDelay(1000);
+            // console.log('>>>', timeline.getDelay(), player.seekRange(), player.seekRange().end - player.seekRange().start);
+            // video.currentTime = player.seekRange().start;
           })
           .catch(onError);
       }
