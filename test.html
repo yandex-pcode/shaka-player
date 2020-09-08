@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Shaka</title>
+    <style>
+        #video {
+            background: #333;
+        }
+    </style>
+   <!-- <script src="https://yastatic.net/shaka-player/2.5.5-yandex-patched-custom-build/shaka-player.compiled.js"></script> -->
+    <script src="dist/shaka-player.compiled.debug.js"></script>
+    <script>
+      // var manifestUri = 'https://strm.yandex.ru/kal/demo_channel/manifest.mpd';
+      var manifestUri = 'https://strm.yandex.ru/vh-ya-news-converted/vod-content/11239105495491049655/dash/manifest.mpd';
+      // var manifestUri = 'http://low-latency-transcoder.sas.yp-c.yandex.net/playlist/manifest.mpd';
+      // var manifestUri = 'https://media.axprod.net/TestVectors/v9-MultiFormat/Clear/Manifest.mpd';
+
+      function initApp() {
+        shaka.polyfill.installAll();
+        if (shaka.Player.isBrowserSupported()) {
+          initPlayer();
+        } else {
+          console.log('DASH: BROWSER NOT SUPPORTED!');
+        }
+      }
+
+      function initPlayer() {
+        var video = document.getElementById('video');
+        var player = new shaka.Player(video);
+
+        video.onprogress = (e) => {
+          if (video.buffered.length > 0) {
+            console.log(video.buffered.end(0));
+          }
+        };
+
+        window.player = player;
+        player.configure({ 
+          manifest: {
+            dash: {
+              // https://st.yandex-team.ru/PLAYERWEB-1345#5e01dcc982a70054f2a78830
+              // начинаем играть сразу с первого чанка не зависимо от minBufferTime в плейлисте
+              ignoreMinBufferTime: true,
+            }
+          },
+          streaming: {
+            retryParameters: {
+              timeout: 3000,
+              maxAttempts: 100,
+            }
+          }
+        });
+        player.addEventListener('error', onErrorEvent);
+        console.time('firstFrame');
+        video.ontimeupdate = () => {
+          if (video.currentTime > 0) {
+            console.timeEnd('firstFrame');
+            video.ontimeupdate = null;
+          }
+        };
+        player.addEventListener('manifestparsed', () => {
+          const timeline = player.getManifest().presentationTimeline;
+          console.log('>>> manifestparsed', timeline.getDelay(), player.seekRange(), player.seekRange().end - player.seekRange().start);
+          timeline.setDelay(900)
+        })
+
+        player
+          .load(manifestUri, 0)
+          .then(function() {
+            const timeline = player.getManifest().presentationTimeline;
+            // const currentDelay = timeline.getDelay();
+            console.log('The video has now been loaded!');
+            console.log('>>> load', timeline.getDelay(), player.seekRange(), player.seekRange().end - player.seekRange().start);
+            // timeline.setDelay(1000);
+            // console.log('>>>', timeline.getDelay(), player.seekRange(), player.seekRange().end - player.seekRange().start);
+            // video.currentTime = player.seekRange().start;
+          })
+          .catch(onError);
+      }
+
+      function onErrorEvent(event) {
+        onError(event.detail);
+      }
+
+      function onError(error) {
+        console.error('Error code', error.code, 'object', error);
+      }
+
+      window.addEventListener(
+        'load',
+        function load(e) {
+          console.log('load');
+          initApp();
+        },
+        false,
+      );
+    </script>
+</head>
+<body>
+<video
+        id="video"
+        width="640"
+        controls
+        autoplay muted
+></video>
+</body>
+</html>
