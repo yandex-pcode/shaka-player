@@ -91,6 +91,8 @@ shaka.extern.RetryParameters;
  * @property {?string} sessionId
  *   If this is a LICENSE request, this field contains the session ID of the
  *   EME session that made the request.
+ * @property {?Uint8Array} loadedData
+ *   If this is a SEGMENT request and fetch is supported, this field contains partially loaded data.
  *
  * @exportDoc
  */
