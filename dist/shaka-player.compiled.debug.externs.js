@@ -463,9 +463,10 @@ shaka.net.NetworkingEngine.prototype.destroy = function() {};
  * Makes a network request and returns the resulting data.
  * @param {shaka.net.NetworkingEngine.RequestType} type
  * @param {shaka.extern.Request} request
+ * @param {function(Uint8Array)=} onPartialLoad
  * @return {!shaka.net.NetworkingEngine.PendingRequest}
  */
-shaka.net.NetworkingEngine.prototype.request = function(type, request) {};
+shaka.net.NetworkingEngine.prototype.request = function(type, request, onPartialLoad) {};
 /**
  * A wrapper class for the number of bytes remaining to be downloaded for the
  * request.
