@@ -61,7 +61,8 @@ shaka.extern.RetryParameters;
  *   allowCrossSiteCredentials: boolean,
  *   retryParameters: !shaka.extern.RetryParameters,
  *   licenseRequestType: ?string,
- *   sessionId: ?string
+ *   sessionId: ?string,
+ *   streamDataCallback: ?function(BufferSource)
  * }}
  *
  * @description
@@ -91,6 +92,8 @@ shaka.extern.RetryParameters;
  * @property {?string} sessionId
  *   If this is a LICENSE request, this field contains the session ID of the
  *   EME session that made the request.
+ * @property {?function(BufferSource)} streamDataCallback
+ *   A callback function to handle the chunked data of the ReadableStream.
  *
  * @exportDoc
  */
