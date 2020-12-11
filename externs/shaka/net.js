@@ -92,6 +92,8 @@ shaka.extern.RetryParameters;
  * @property {?string} sessionId
  *   If this is a LICENSE request, this field contains the session ID of the
  *   EME session that made the request.
+ * @property {?shaka.extern.Stream} stream
+ *   Corresponding stream for a segment request
  * @property {?function(BufferSource)} streamDataCallback
  *   A callback function to handle the chunked data of the ReadableStream.
  *
