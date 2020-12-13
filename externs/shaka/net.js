@@ -96,6 +96,8 @@ shaka.extern.RetryParameters;
  *   Corresponding stream for a segment request
  * @property {?function(BufferSource)} streamDataCallback
  *   A callback function to handle the chunked data of the ReadableStream.
+ * @property {?function()=} onRetry
+ *   A callback function to handle the retry of underlying request
  *
  * @exportDoc
  */
