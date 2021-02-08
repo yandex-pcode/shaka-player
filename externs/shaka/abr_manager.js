@@ -98,7 +98,7 @@ shaka.extern.AbrManager.prototype.setVariants = function(variants) {};
 
 /**
  * Chooses one variant to switch to.  Called by the Player.
- * @return {shaka.extern.Variant}
+ * @return {!Promise<shaka.extern.Variant | null>}
  * @exportDoc
  */
 shaka.extern.AbrManager.prototype.chooseVariant = function() {};
