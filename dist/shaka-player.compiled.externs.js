@@ -482,9 +482,12 @@ shaka.net.NetworkingEngine.defaultRetryParameters = function() {};
  * Makes a simple network request for the given URIs.
  * @param {!Array.<string>} uris
  * @param {shaka.extern.RetryParameters} retryParams
+ * @param {?shaka.extern.Stream=} stream
+ * @param {?function(BufferSource)=} streamDataCallback
+ * @param {?function()=} onRetry
  * @return {shaka.extern.Request}
  */
-shaka.net.NetworkingEngine.makeRequest = function(uris, retryParams) {};
+shaka.net.NetworkingEngine.makeRequest = function(uris, retryParams, stream, streamDataCallback, onRetry) {};
 /**
  * @override
  */
@@ -1176,8 +1179,10 @@ shaka.util.Mp4Parser.prototype.stop = function() {};
  * @param {boolean=} partialOkay If true, allow reading partial payloads
  *   from some boxes. If the goal is a child box, we can sometimes find it
  *   without enough data to find all child boxes.
+ * @param {boolean=} stopOnPartial If true, stop reading if an incomplete
+ *   box is detected.
  */
-shaka.util.Mp4Parser.prototype.parse = function(data, partialOkay) {};
+shaka.util.Mp4Parser.prototype.parse = function(data, partialOkay, stopOnPartial) {};
 /**
  * Parse the next box on the current level.
  * @param {number} absStart The absolute start position in the original
@@ -1186,8 +1191,10 @@ shaka.util.Mp4Parser.prototype.parse = function(data, partialOkay) {};
  * @param {boolean=} partialOkay If true, allow reading partial payloads
  *   from some boxes. If the goal is a child box, we can sometimes find it
  *   without enough data to find all child boxes.
+ * @param {boolean=} stopOnPartial If true, stop reading if an incomplete
+ *   box is detected.
  */
-shaka.util.Mp4Parser.prototype.parseNext = function(absStart, reader, partialOkay) {};
+shaka.util.Mp4Parser.prototype.parseNext = function(absStart, reader, partialOkay, stopOnPartial) {};
 /**
  * A callback that tells the Mp4 parser to treat the body of a box as a series
  * of boxes. The number of boxes is limited by the size of the parent box.
@@ -1524,6 +1531,14 @@ shaka.media.PresentationTimeline.prototype.getSeekRangeEnd = function() {};
  * @return {boolean}
  */
 shaka.media.PresentationTimeline.prototype.usingPresentationStartTime = function() {};
+/**
+ * Sets the presentation's segment availability time offset. This should be
+ * only set for Low Latency Dash.
+ * The segments are available earlier for download than the availability start
+ * time, so we can move closer to the live edge.
+ * @param {number} offset
+ */
+shaka.media.PresentationTimeline.prototype.setAvailabilityTimeOffset = function(offset) {};
 /**
  * Creates a new DASH parser.
  * @struct
